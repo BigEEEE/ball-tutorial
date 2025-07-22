@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
+    public Camera mainCam;
 
     private float movementX;
     private float movementY;
@@ -17,33 +18,44 @@ public class PlayerController : MonoBehaviour
     {
 
         count = 0;
+
         rb = GetComponent<Rigidbody>();
+
         winTextObject.SetActive(false);
         SetCountText();
     }
 
     private void FixedUpdate()
     {
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-        rb.AddForce(movement * speed);
-    }
+        Vector3 camForward = mainCam.transform.forward;
+        Vector3 camRight = mainCam.transform.right;
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("PickUp"))
+
+        float horizontalAxis = Input.GetAxis("Horizontal");
+        float verticalAxis = Input.GetAxis("Vertical");
+        //project forward and right vectors on the horizontal plane (y = 0)
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
+
+
+        Vector3 desiredMoveDirection = camForward * verticalAxis + camRight * horizontalAxis;
+
+
+        rb.AddForce(desiredMoveDirection * speed);
+    }
+        void OnTriggerEnter(Collider other)
         {
-            other.gameObject.SetActive(false);
-            count = count + 1;
-            SetCountText();
+            if (other.gameObject.CompareTag("PickUp"))
+            {
+                other.gameObject.SetActive(false);
+                count = count + 1;
+                SetCountText();
+            }
         }
-    }
-    void OnMove (InputValue movementValue)
-    {
-        Vector2 movementVector = movementValue.Get<Vector2>();
+    
 
-        movementX = movementVector.x;
-        movementY = movementVector.y;
-    }
 
     void SetCountText()
     {
