@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
     public GameObject restartButton;
     public GameObject exitButton;
     public Camera mainCam;
-
-    private float movementX;
-    private float movementY;
     void Start()
     {
 
@@ -44,10 +41,10 @@ public class PlayerController : MonoBehaviour
         camRight.Normalize();
 
 
-        Vector3 desiredMoveDirection = camForward * verticalAxis + camRight * horizontalAxis;
+        Vector3 moveDirection = camForward * verticalAxis + camRight * horizontalAxis;
 
 
-        rb.AddForce(desiredMoveDirection * speed);
+        rb.AddForce(moveDirection * speed);
     }
         void OnTriggerEnter(Collider other)
         {
