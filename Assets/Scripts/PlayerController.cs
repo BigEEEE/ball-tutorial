@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
+    public GameObject restartButton;
+    public GameObject exitButton;
     public Camera mainCam;
 
     private float movementX;
@@ -22,6 +24,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         winTextObject.SetActive(false);
+        restartButton.SetActive(false);
+        exitButton.SetActive(false);
         SetCountText();
     }
 
@@ -73,6 +77,8 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(gameObject);
             winTextObject.gameObject.SetActive(true);
+            restartButton.SetActive(true);
+            exitButton.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
         }
     }
